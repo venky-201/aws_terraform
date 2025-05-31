@@ -4,21 +4,21 @@ resource "azurerm_resource_group" "this" {
 }
 resource "azurerm_log_analytics_workspace" "example" {
   name                = "acctest-01"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.this.location
+  resource_group_name = azurerm_resource_group.this.name
   sku                 = "PerGB2018"
   retention_in_days   = 30
 }
 resource "azurerm_container_app_environment" "example" {
   name                       = "Example-Environment"
-  location                   = azurerm_resource_group.example.location
-  resource_group_name        = azurerm_resource_group.example.name
+  location                   = azurerm_resource_group.this.location
+  resource_group_name        = azurerm_resource_group.this.name
   log_analytics_workspace_id = azurerm_log_analytics_workspace.example.id
 }
 resource "azurerm_container_app" "this" {
-  name = ""
-  container_app_environment_id = ""
-  resource_group_name = ""
+  name = "eampleapp"
+  container_app_environment_id = azurerm_container_app_environment.example.id
+  resource_group_name = azurerm_resource_group.this.name
   revision_mode = "single"
   template {
     container {
